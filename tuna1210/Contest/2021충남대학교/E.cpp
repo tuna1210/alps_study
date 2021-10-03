@@ -3,27 +3,59 @@
 #include <set>
 #include <string>
 #include <vector>
-#include <stack>
+#include <queue>
 using namespace std;
 
 int n;
 map<string, vector<string>> G;
-set<string> income;
-set<string> items;
-set<string> visited;
-stack<string> s;
+set<string> item;
+set<string> S;
+map<string, int> cost;
 
-void dfs(string a)
+void khan()
 {
-    cout << "cur : " << a << "\n";
-    for(const auto& i : G[a])
+    queue<string> q;
+    for(const auto& i : item)
     {
-        if(!visited.insert(i).second) continue;
-        flag = true;
-        dfs(i);
+        if(cost[i] == 0) q.push(i);
     }
-    s.push(a);
+    
+    queue<string> answer;
+    while(!q.empty())
+    {
+        int qsize = q.size();
+        vector<string> wait;
+        for(int qs = 0; qs < qsize; qs++)
+        {
+            string cur = q.front();
+            q.pop();
 
+            wait.push_back(cur);
+            
+            for(const auto& next : G[cur])
+            {
+                cost[next]--;
+                if(cost[next] == 0) q.push(next);
+            }
+        }
+
+        sort(wait.begin(), wait.end());
+
+        for(const auto& i : wait)
+        {
+            answer.push(i);
+        }
+    }
+
+    if(answer.size() < item.size()) cout << -1;
+    else
+    {
+        while(!answer.empty())
+        {
+            cout << answer.front() << "\n";
+            answer.pop();
+        }
+    }
 }
 
 int main()
@@ -31,32 +63,23 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    
+
     cin >> n;
 
-    string a, b;
-    int num = 1;
     for (int i = 0; i < n; i++)
     {
+        string a, b;
         cin >> a >> b;
+
+        item.insert(a);
+        item.insert(b);
+
+        cost[b]++;
+
         G[a].push_back(b);
-        items.insert(a);
-        items.insert(b);
-        income.insert(b);
     }
-    
-    for(const auto& i : items)
-    {
-        if(find(income.begin(), income.end(), i) == income.end())
-        {
-            cout << i << "\n";
-            dfs(i);
-        }
-    }
-    cout << "\n";
-    while(!s.empty())
-    {
-        cout << s.top() << "\n";
-        s.pop();
-    }
+
+    khan();
+
+    return 0;   
 }
