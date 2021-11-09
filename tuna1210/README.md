@@ -104,3 +104,7 @@ $n\rightarrow\infty$일 때 $h(n) > f(n)$이므로  $\Theta(h(n)) = \Theta(n)$�
     * 함수 처음 시작할 때 0에서 시작했으니 0번 비트를 마스킹 해주고 시작해야 한다. (`solve(0, (1 << 0))`)
 * [달이 차오른다, 가자](https://www.acmicpc.net/problem/1194)
     * `visited` 배열의 비트마스킹 부분에서 시작 좌표의 열쇠를 초기화 할 때 `visited[x][y][1 << 6] = true` 으로 초기화 하면 안된다. 왜냐하면 `visited` 배열을 `visited[n][m][1 << 6]` 으로 생성하였기 때문에 `visited` 배열의 크기는 $N\times M\times 2^6$ 인데, 여기서 열쇠가 하나도 없다는 것을 뜻하는것은 $2^6$가 아닌 $0$이므로 `visited[x][y][0] = true`으로 초기화 해야 한다.
+
+***
+## 세그먼트 트리
+* 주의할 점: Update시 실제 배열 값도 바꿔줘야함
